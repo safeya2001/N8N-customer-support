@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ⚽ Caster Sport - نظام الدعم الذكي | Smart Customer Support System
 
 > **نظام متكامل للدعم الفني** يجمع بين N8N Workflow و RAG API و Supabase لإدارة استفسارات العملاء تلقائياً  
@@ -791,4 +792,117 @@ Your intelligent customer support system is now configured and ready to handle:
 #   N 8 N - c u s t o m e r - s u p p o r t 
  
 
+ 
+=======
+## Caster Sport – Smart Customer Support System (Final Project)
+
+This repository contains the final project for a smart, policy‑aware customer support system for Caster Sport.  
+It combines a Python RAG API and n8n workflow automation to generate ready‑to‑send, policy‑compliant email replies from incoming customer messages.
+
+---
+
+## 1. High‑Level Architecture
+
+- Incoming customer emails or tickets are received (for example via a Gmail trigger in n8n).
+- The n8n workflow extracts the relevant fields (sender, subject, body, order information).
+- n8n sends the cleaned question or email body to the RAG API (`POST /ask`).
+- The RAG API (Flask + LangChain + FAISS + OpenRouter) retrieves relevant policy snippets and uses an LLM (Gemini via OpenRouter) to generate:
+  - a suggested email subject, and
+  - a full email body.
+- n8n receives the structured response and forwards it to downstream systems (for example a Gmail draft, CRM ticket, or database record).
+
+For the detailed design and API of the RAG service, see `RAG/README.md`.
+
+---
+
+## 2. Repository Structure
+
+```text
+Final project/
+├─ RAG/                     # Python RAG API (Flask + LangChain + FAISS)
+│  ├─ rag_server.py         # Policy‑aware email answer API
+│  ├─ policies/             # Policy text files used by the RAG system
+│  ├─ run.bat               # Windows helper script to install deps and run the server
+│  ├─ requirements.txt      # Python dependencies for the RAG service
+│  └─ README.md             # Detailed technical documentation for the RAG component
+│
+├─ N8N/                     # n8n workflow(s) for orchestration / integration
+│  └─ Main Workflow - V4.json
+│
+├─ TECHNICAL REPORT.pdf     # Final written report (PDF)
+└─ TECHNICAL REPORT.docx    # Editable version of the final report
+```
+
+---
+
+## 3. RAG API – Quick Start (Windows)
+
+1. Clone or download this repository.
+2. Open a terminal in the `RAG` folder:
+
+   ```bash
+   cd "Final project\RAG"
+   ```
+
+3. Install dependencies (optional if you prefer not to use `run.bat`):
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Create the environment file from the example:
+
+   ```bash
+   copy .env.example .env
+   ```
+
+5. Edit `.env` and set your `OPENROUTER_API_KEY`.
+6. Start the server using the helper script:
+
+   ```bash
+   run.bat
+   ```
+
+7. Open in a browser:
+
+   ```text
+   http://localhost:5050/health
+   ```
+
+   Expected response:
+
+   ```json
+   {"status": "ok"}
+   ```
+
+You can now call the RAG API using the `POST /ask` endpoint as documented in `RAG/README.md`.
+
+---
+
+## 4. n8n Workflow (Automation Layer)
+
+The file `N8N/Main Workflow - V4.json` can be imported into an n8n instance. At a high level, the workflow:
+
+- Receives incoming events (for example, emails from a Gmail trigger).
+- Normalises and classifies the request (order inquiry, cancel request, confirm cancel, general question).
+- Calls the RAG API (`/ask`) with the appropriate text and metadata.
+- Uses the structured response (subject and body) to build a draft reply or update downstream systems (email, ticketing, database, and so on).
+
+The workflow is optional but demonstrates how the RAG engine can be integrated into a real automation platform without changing the Python code.
+
+---
+
+## 5. Documentation
+
+- RAG implementation and API: `RAG/README.md`
+- Academic / formal project description: `TECHNICAL REPORT.pdf` and `TECHNICAL REPORT.docx`
+
+Together, these provide:
+
+- A clear technical entry point for developers (RAG README).
+- A concise top‑level overview of components and architecture (this README).
+- A complete written project report for academic or business review (technical report).
+
+>>>>>>> 1e4f0d2 (Update docs and RAG+n8n project structure)
+#   N 8 N - f i n a l - p r o j e c t  
  
